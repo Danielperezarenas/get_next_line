@@ -1,0 +1,10 @@
+Esta es la primera línea de prueba.
+Aquí va la segunda línea del texto.
+Tercera línea para continuar con el ejemplo.
+Cuarta línea, esperemos que funcione bien.
+Quinta línea, debería leer esta también.
+La sexta línea está aquí para probar más.
+Séptima línea, casi terminamos.
+Octava línea, estamos muy cerca del final.
+Novena línea, el texto está casi completo.
+Décima y última línea, fin del archivo.

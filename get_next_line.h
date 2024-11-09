@@ -6,7 +6,7 @@
 /*   By: danperez <danperez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 16:37:52 by danperez          #+#    #+#             */
-/*   Updated: 2024/11/02 23:21:45 by danperez         ###   ########.fr       */
+/*   Updated: 2024/11/08 18:18:51 by danperez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,5 +24,7 @@ char	*ft_strchr(const char *s, int c);
 char	*ft_strcat(char *dest, char *src);
 char	*ft_strdup(const char *s);
 size_t	ft_strlen(const char *s);
+char	*ft_strjoin(char const *s1, char const *s2);
+
 
 #endif
