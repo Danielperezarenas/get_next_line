@@ -6,15 +6,15 @@
 /*   By: danperez <danperez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 16:37:52 by danperez          #+#    #+#             */
-/*   Updated: 2024/11/25 17:54:36 by danperez         ###   ########.fr       */
+/*   Updated: 2024/11/28 13:23:20 by danperez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LIBFT_H
-# define LIBFT_H
+#ifndef GET_NEXT_LINE_H
+# define GET_NEXT_LINE_H
 
-#ifndef BUFFER_SIZE
-# define BUFFER_SIZE 45
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 45
 # endif
 
 # include <stdio.h>

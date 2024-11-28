@@ -6,7 +6,7 @@
 /*   By: danperez <danperez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 16:37:43 by danperez          #+#    #+#             */
-/*   Updated: 2024/11/27 20:09:48 by danperez         ###   ########.fr       */
+/*   Updated: 2024/11/28 13:19:24 by danperez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ char	*get_next_line(int fd)
 	char		*next_line;
 	int			bytes_read;
 
+	bytes_read = 0;
 	buffer = malloc(sizeof(char *) * (BUFFER_SIZE + 1));
 	if (!buffer)
 		return (NULL);
@@ -30,7 +31,7 @@ char	*get_next_line(int fd)
 		else
 			storage = temp_storage(storage, buffer);
 		if (ft_strchr(storage, '\n'))
-			break;
+			break ;
 	}
 	free(buffer);
 	if (!storage || storage[0] == '\0')
