@@ -6,7 +6,7 @@
 /*   By: danperez <danperez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 16:37:43 by danperez          #+#    #+#             */
-/*   Updated: 2024/11/28 13:19:24 by danperez         ###   ########.fr       */
+/*   Updated: 2024/11/28 14:10:03 by danperez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,13 @@ char	*get_next_line(int fd)
 	char		*next_line;
 	int			bytes_read;
 
-	bytes_read = 0;
+	bytes_read = 1;
 	buffer = malloc(sizeof(char *) * (BUFFER_SIZE + 1));
 	if (!buffer)
 		return (NULL);
-	while ((bytes_read = read(fd, buffer, BUFFER_SIZE)) > 0)
+	while (bytes_read > 0)
 	{
+		bytes_read = read(fd, buffer, BUFFER_SIZE);
 		buffer[bytes_read] = '\0';
 		if (!storage)
 			storage = strdup(buffer);
@@ -52,7 +53,7 @@ char	*line(char *storage)
 	line = malloc(sizeof(char) * (len + 2));
 	if (!line)
 		return (NULL);
-	strncpy(line, storage, len + 1);
+	ft_memcpy(line, storage, len + 1);
 	if (storage[len] == '\n')
 		line[len++] = '\n';
 	line[len++] = '\0';
@@ -85,7 +86,7 @@ char	*temp_storage(char *storage, char *buffer)
 	return (storage);
 }
 
-/*
+
 int	main(void)
 {
 	int		text;
@@ -100,4 +101,3 @@ int	main(void)
 	close(text);
 	return (0);
 }
-*/
