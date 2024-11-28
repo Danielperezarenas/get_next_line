@@ -6,42 +6,97 @@
 /*   By: danperez <danperez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 16:37:43 by danperez          #+#    #+#             */
-/*   Updated: 2024/11/08 18:24:48 by danperez         ###   ########.fr       */
+/*   Updated: 2024/11/27 20:09:48 by danperez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <string.h>
-
-#define BUFFER_SIZE 42
 
 char	*get_next_line(int fd)
 {
-	static char	*restante;	// Almacenamiento temporal para la próxima línea
-	char		buffer[BUFFER_SIZE + 1];
-	int			bytes_leidos;
+	static char	*storage;
+	char		*buffer;
+	char		*next_line;
+	int			bytes_read;
 
-	// Leer del archivo
-	bytes_leidos = read(fd, buffer, BUFFER_SIZE);
-	if (bytes_leidos <= 0)
-		return (NULL);		// Fin de archivo o error
-	buffer[bytes_leidos] = '\0';
-
-	// En este punto, `buffer` contiene los datos leídos y debes agregarlos a `restante`.
-	// Puedes usar `ft_strcat` o `ft_strjoin` según tu preferencia.
-	// restante = ft_strjoin(buffer, restante);
-
-	return NULL;			// Para pruebas, estamos retornando NULL
+	buffer = malloc(sizeof(char *) * (BUFFER_SIZE + 1));
+	if (!buffer)
+		return (NULL);
+	while ((bytes_read = read(fd, buffer, BUFFER_SIZE)) > 0)
+	{
+		buffer[bytes_read] = '\0';
+		if (!storage)
+			storage = strdup(buffer);
+		else
+			storage = temp_storage(storage, buffer);
+		if (ft_strchr(storage, '\n'))
+			break;
+	}
+	free(buffer);
+	if (!storage || storage[0] == '\0')
+		return (NULL);
+	next_line = line(storage);
+	storage = next(storage);
+	return (next_line);
 }
 
+char	*line(char *storage)
+{
+	char	*line;
+	size_t	len;
+
+	len = 0;
+	while (storage[len] && storage[len] != '\n')
+		len++;
+	line = malloc(sizeof(char) * (len + 2));
+	if (!line)
+		return (NULL);
+	strncpy(line, storage, len + 1);
+	if (storage[len] == '\n')
+		line[len++] = '\n';
+	line[len++] = '\0';
+	return (line);
+}
+
+char	*next(char *storage)
+{
+	char	*new_line;
+	char	*next;
+
+	next = ft_strchr(storage, '\n');
+	if (!next)
+	{
+		free(storage);
+		return (NULL);
+	}
+	new_line = ft_strdup(next + 1);
+	free(storage);
+	return (new_line);
+}
+
+char	*temp_storage(char *storage, char *buffer)
+{
+	char	*temp;
+
+	temp = ft_strjoin(storage, buffer);
+	free(storage);
+	storage = temp;
+	return (storage);
+}
+
+/*
 int	main(void)
 {
-	int	text = open("text.txt", O_RDWR | O_CREAT);
-	char	buffer[30];
+	int		text;
+	char	*buffer;
 
-	bzero(buffer, 29);
-	printf("Texto a leer %d\n", text);
-
-	write(text, "Hola mundo", 15);
+	text = open("text.txt", O_RDONLY | O_CREAT);
+	while ((buffer = get_next_line(text)) != NULL)
+	{
+		printf("%s", buffer);
+		free(buffer);
+	}
+	close(text);
 	return (0);
 }
+*/
