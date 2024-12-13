@@ -6,7 +6,7 @@
 /*   By: danperez <danperez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 16:37:52 by danperez          #+#    #+#             */
-/*   Updated: 2024/12/13 15:39:32 by danperez         ###   ########.fr       */
+/*   Updated: 2024/12/13 15:46:54 by danperez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define GET_NEXT_LINE_H
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 45
+#  define BUFFER_SIZE 40
 # endif
 
 # include <stdio.h>
