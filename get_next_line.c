@@ -6,7 +6,7 @@
 /*   By: danperez <danperez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 16:37:43 by danperez          #+#    #+#             */
-/*   Updated: 2024/11/27 20:09:48 by danperez         ###   ########.fr       */
+/*   Updated: 2024/12/13 23:11:21 by danperez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,22 +19,35 @@ char	*get_next_line(int fd)
 	char		*next_line;
 	int			bytes_read;
 
-	buffer = malloc(sizeof(char *) * (BUFFER_SIZE + 1));
+	bytes_read = 1;
+	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!buffer)
 		return (NULL);
-	while ((bytes_read = read(fd, buffer, BUFFER_SIZE)) > 0)
+	while (bytes_read > 0)
 	{
-		buffer[bytes_read] = '\0';
-		if (!storage)
-			storage = strdup(buffer);
-		else
-			storage = temp_storage(storage, buffer);
-		if (ft_strchr(storage, '\n'))
-			break;
+		bytes_read = read(fd, buffer, BUFFER_SIZE);
+		if (bytes_read > 0)
+		{
+			buffer[bytes_read] = '\0';
+			if (!storage)
+				storage = strdup(buffer);
+			else
+				storage = temp_storage(storage, buffer);
+			if (ft_strchr(storage, '\n'))
+				break;
+		}
+	}
+	if (bytes_read == -1)
+	{
+		free(buffer);
+		return (NULL);
 	}
 	free(buffer);
 	if (!storage || storage[0] == '\0')
+	{
+		free(buffer);
 		return (NULL);
+	}
 	next_line = line(storage);
 	storage = next(storage);
 	return (next_line);
