@@ -6,7 +6,7 @@
 /*   By: danperez <danperez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 16:37:43 by danperez          #+#    #+#             */
-/*   Updated: 2024/11/28 14:10:03 by danperez         ###   ########.fr       */
+/*   Updated: 2024/12/13 15:39:41 by danperez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,23 +20,34 @@ char	*get_next_line(int fd)
 	int			bytes_read;
 
 	bytes_read = 1;
-	buffer = malloc(sizeof(char *) * (BUFFER_SIZE + 1));
+	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!buffer)
 		return (NULL);
 	while (bytes_read > 0)
 	{
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
-		buffer[bytes_read] = '\0';
-		if (!storage)
-			storage = strdup(buffer);
-		else
-			storage = temp_storage(storage, buffer);
-		if (ft_strchr(storage, '\n'))
-			break ;
+		if (bytes_read > 0)
+		{
+			buffer[bytes_read] = '\0';
+			if (!storage)
+				storage = ft_strdup(buffer);
+			else
+				storage = temp_storage(storage, buffer);
+			if (ft_strchr(storage, '\n'))
+				break ;
+		}
+	}
+	if (bytes_read == -1)
+	{
+		free(buffer);
+		return (NULL);
 	}
 	free(buffer);
 	if (!storage || storage[0] == '\0')
+	{
+		free(storage);
 		return (NULL);
+	}
 	next_line = line(storage);
 	storage = next(storage);
 	return (next_line);
@@ -86,16 +97,17 @@ char	*temp_storage(char *storage, char *buffer)
 	return (storage);
 }
 
-
 int	main(void)
 {
 	int		text;
 	char	*buffer;
+	size_t	i = 0;
 
 	text = open("text.txt", O_RDONLY | O_CREAT);
 	while ((buffer = get_next_line(text)) != NULL)
 	{
-		printf("%s", buffer);
+		i++;
+		printf("%zu %s", i, buffer);
 		free(buffer);
 	}
 	close(text);
