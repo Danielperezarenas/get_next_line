@@ -6,7 +6,7 @@
 /*   By: danperez <danperez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 16:37:43 by danperez          #+#    #+#             */
-/*   Updated: 2024/12/13 15:50:21 by danperez         ###   ########.fr       */
+/*   Updated: 2024/12/13 15:51:12 by danperez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ char	*get_next_line(int fd)
 				break ;
 		}
 	}
-	if (bytes_read == 0)
+	if (bytes_read == -1)
 	{
 		free(buffer);
 		return (NULL);
