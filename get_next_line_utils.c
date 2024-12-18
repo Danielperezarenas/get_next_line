@@ -6,7 +6,7 @@
 /*   By: danperez <danperez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 16:37:50 by danperez          #+#    #+#             */
-/*   Updated: 2024/11/08 18:17:43 by danperez         ###   ########.fr       */
+/*   Updated: 2024/12/18 15:08:20 by danperez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,21 +28,15 @@ char	*ft_strchr(const char *s, int c)
 	return (NULL);
 }
 
-char	*ft_strcat(char *dest, char *src)
+void	*ft_memcpy(void *dest, const void *src, size_t n)
 {
-	size_t	i;
-	size_t	j;
+	unsigned char		*d;
+	const unsigned char	*s;
 
-	i = 0;
-	j = 0;
-	while (dest[i])
-		i++;
-	while (src[j])
-	{
-		dest[i + j] = src[j];
-		j++;
-	}
-	dest[i + j] = '\0';
+	d = dest;
+	s = src;
+	while (n--)
+		*d++ = *s++;
 	return (dest);
 }
 

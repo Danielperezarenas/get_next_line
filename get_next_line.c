@@ -6,7 +6,7 @@
 /*   By: danperez <danperez@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 16:37:43 by danperez          #+#    #+#             */
-/*   Updated: 2024/12/13 23:11:21 by danperez         ###   ########.fr       */
+/*   Updated: 2024/12/18 15:10:10 by danperez         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,35 +17,18 @@ char	*get_next_line(int fd)
 	static char	*storage;
 	char		*buffer;
 	char		*next_line;
-	int			bytes_read;
 
-	bytes_read = 1;
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (NULL);
 	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!buffer)
 		return (NULL);
-	while (bytes_read > 0)
-	{
-		bytes_read = read(fd, buffer, BUFFER_SIZE);
-		if (bytes_read > 0)
-		{
-			buffer[bytes_read] = '\0';
-			if (!storage)
-				storage = strdup(buffer);
-			else
-				storage = temp_storage(storage, buffer);
-			if (ft_strchr(storage, '\n'))
-				break;
-		}
-	}
-	if (bytes_read == -1)
-	{
-		free(buffer);
-		return (NULL);
-	}
+	storage = temp_storage(fd, storage, buffer);
 	free(buffer);
 	if (!storage || storage[0] == '\0')
 	{
-		free(buffer);
+		free(storage);
+		storage = NULL;
 		return (NULL);
 	}
 	next_line = line(storage);
@@ -61,13 +44,20 @@ char	*line(char *storage)
 	len = 0;
 	while (storage[len] && storage[len] != '\n')
 		len++;
-	line = malloc(sizeof(char) * (len + 2));
+	if (storage[len] == '\n')
+		line = malloc(sizeof(char) * (len + 2));
+	else
+		line = malloc(sizeof(char) * (len + 1));
 	if (!line)
 		return (NULL);
-	strncpy(line, storage, len + 1);
+	memcpy(line, storage, len);
 	if (storage[len] == '\n')
-		line[len++] = '\n';
-	line[len++] = '\0';
+	{
+		line[len] = '\n';
+		line[len + 1] = '\0';
+	}
+	else
+		line[len] = '\0';
 	return (line);
 }
 
@@ -87,29 +77,50 @@ char	*next(char *storage)
 	return (new_line);
 }
 
-char	*temp_storage(char *storage, char *buffer)
+char	*temp_storage(int fd, char *storage, char *buffer)
 {
 	char	*temp;
+	int		bytes_read;
 
-	temp = ft_strjoin(storage, buffer);
-	free(storage);
-	storage = temp;
+	bytes_read = 1;
+	while (bytes_read > 0 && (!storage || !ft_strchr(storage, '\n')))
+	{
+		bytes_read = read(fd, buffer, BUFFER_SIZE);
+		if (bytes_read == -1)
+		{
+			free(storage);
+			return(NULL);
+		}
+		if (bytes_read == 0)
+			break;
+		buffer[bytes_read] = '\0';
+		if (!storage)
+			storage = ft_strdup(buffer);
+		else
+		{
+			temp = ft_strjoin(storage, buffer);
+			free(storage);
+			storage = temp;
+		}
+	}
 	return (storage);
 }
 
-/*
-int	main(void)
+/* int	main(void)
 {
 	int		text;
 	char	*buffer;
+	size_t		i;
 
+	i = 0;
 	text = open("text.txt", O_RDONLY | O_CREAT);
 	while ((buffer = get_next_line(text)) != NULL)
 	{
-		printf("%s", buffer);
+		i++;
+		printf("%ld %s", i, buffer);
 		free(buffer);
 	}
 	close(text);
 	return (0);
 }
-*/
+ */
